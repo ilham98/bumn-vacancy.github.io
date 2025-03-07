@@ -33,6 +33,9 @@ def fetch_all_vacancies():
                     detail = fetch_vacancy_detail(vacancy["vacancy_id"])
                     if detail:
                         vacancy["detail"] = detail
+                        # Check if 'toefl' is in the requirement
+                        requirement = detail.get("data", {}).get("requirement", "").lower()
+                        vacancy["toefl"] = "toefl" in requirement
                 all_data.extend(data["data"])
                 if len(data["data"]) < size:
                     break  # Stop if this is the last page
@@ -70,6 +73,7 @@ def display_vacancies(vacancies):
         print(f"Experience Level: {job['experience_level']}")
         print(f"Stream: {job['stream_name']}")
         print(f"Total Quota: {job['total_quota']}")
+        print(f"TOEFL Required: {'Yes' if job.get('toefl') else 'No'}")
         print("-" * 50)
 
 if __name__ == "__main__":

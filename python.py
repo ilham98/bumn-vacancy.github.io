@@ -29,6 +29,10 @@ def fetch_all_vacancies():
         if response.status_code == 201:
             data = response.json()
             if "data" in data and isinstance(data["data"], list):
+                for vacancy in data["data"]:
+                    detail = fetch_vacancy_detail(vacancy["vacancy_id"])
+                    if detail:
+                        vacancy["detail"] = detail
                 all_data.extend(data["data"])
                 if len(data["data"]) < size:
                     break  # Stop if this is the last page
@@ -40,6 +44,17 @@ def fetch_all_vacancies():
             break
 
     return all_data
+
+def fetch_vacancy_detail(vacancy_id):
+    url = "https://api-rbb.fhcibumn.id/general/career/detail-vacancy"
+    payload = {"vacancy_id": vacancy_id}
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(url, json=payload, headers=headers)
+    if response.status_code == 201:
+        return response.json()
+    else:
+        print(f"Error fetching detail for vacancy_id {vacancy_id}: {response.status_code}, {response.text}")
+        return None
 
 def save_to_file(vacancies, filename="vacancies.json"):
     with open(filename, "w", encoding="utf-8") as file:
@@ -56,7 +71,7 @@ def display_vacancies(vacancies):
         print(f"Stream: {job['stream_name']}")
         print(f"Total Quota: {job['total_quota']}")
         print("-" * 50)
-        
+
 if __name__ == "__main__":
     vacancies = fetch_all_vacancies()
     now = datetime.now().strftime("%Y_%m_%d_%H_%M")

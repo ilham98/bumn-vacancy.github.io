@@ -18,7 +18,7 @@ def fetch_all_vacancies():
             "job_title": "",
             "stream_id": [],
             "company_id": [],
-            "experience_level": ["fresh_graduate"],
+            "experience_level": [],
             "education_level": [],
             "major_id": ["a1981247-4e50-42b0-aa2a-afdb65638ceb"],
             "search": ""

@@ -1,13 +1,14 @@
 import requests
 import json
 import random
+from datetime import datetime
 
 def fetch_all_vacancies():
     url = "https://api-rbb.fhcibumn.id/general/career/list-vacancy"
     headers = {"Content-Type": "application/json"}  # Modify if authentication is required
 
     page = 1
-    size = 10
+    size = 15
     all_data = []
 
     while True:
@@ -55,10 +56,12 @@ def display_vacancies(vacancies):
         print(f"Stream: {job['stream_name']}")
         print(f"Total Quota: {job['total_quota']}")
         print("-" * 50)
-
+        
 if __name__ == "__main__":
     vacancies = fetch_all_vacancies()
-    filename = f"vacancies_{len(vacancies)}_{random.randint(1, 10)}.json"  # Includes length and random number
+    now = datetime.now().strftime("%Y_%m_%d_%H_%M")
+    length = len(vacancies)
+    filename = f"vacancies_{length}_{now}.json"  # Includes length and current datetime
     save_to_file(vacancies, filename)
     display_vacancies(vacancies)
 
